@@ -48,11 +48,11 @@ module.exports = {
   mysql: {
     client: 'mysql',
     connection: {
-      host: Env.get('DB_HOST', 'localhost'),
+      host: Env.get('DB_HOST', 'sql9.freesqldatabase.com'),
       port: Env.get('DB_PORT', '3306'),
-      user: Env.get('DB_USER', 'root'),
-      password: Env.get('DB_PASSWORD', 'san12nas'),
-      database: Env.get('DB_DATABASE', 'adonis_poll')
+      user: Env.get('DB_USER', 'sql9188162'),
+      password: Env.get('DB_PASSWORD', 'sjBN5mPrQa'),
+      database: Env.get('DB_DATABASE', 'sql9188162')
     }
   },
 
