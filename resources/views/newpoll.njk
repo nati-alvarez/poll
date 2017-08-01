@@ -1,0 +1,59 @@
+{% extends 'master' %}
+
+{% block content %}
+    <div class="new-poll">
+        <h1>Create A New Poll</h1>
+        <p class="required" >* marks a required field</p>
+        
+        <form id="new-poll" action="/polls" method="POST" onsubmit="return validateNewPoll();">
+            {{ csrfField }}
+            <div class="input-field">
+                <label><p>*Name Your Poll:</p>
+                    <input type="text" name="title">
+                </label>
+            </div>
+            <div class="input-field">
+                <label id="options"><p>*Add Poll Options:</p>
+                    <input type="text" name="option[]">
+                    <input type="text" name="option[]">
+                </label>
+                <div id="add-option">+ Add More</div>
+            </div>
+            <div class="input-field">
+                <label><p>Set Poll End Date:</p>
+                    <input id="expires" type="date" name="expires">
+                </label>
+            </div>
+            <div class="input-field">
+                <label><p>*Poll Admin Password:</p>
+                    <input type="password" name="password">
+                </label>
+            </div>
+            <div class="input-field">
+                <label><p>*Confirm Password:</p>
+                    <input type="password" name="confirm">
+                </label>
+            </div>
+            <small class="notice" >You will use this password to edit your poll later if needed</small>
+            <input type="submit" value="Create Poll">
+        </form>
+    </div>
+
+    <script>
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        if(dd<10){
+                dd='0'+dd
+            } 
+            if(mm<10){
+                mm='0'+mm
+            } 
+
+        today = yyyy+'-'+mm+'-'+dd;
+        document.getElementById("expires").setAttribute("min", today);
+    </script>
+    <script src="/validateNewPoll.js"></script>
+
+{% endblock %}

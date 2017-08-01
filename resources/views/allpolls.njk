@@ -1,0 +1,26 @@
+{% extends 'master' %}
+
+{% block content %}
+    <div id="all-polls">
+        <h1>The Latest Polls</h1>
+        {% for poll in polls.data %}
+            <div class="poll">
+            <h2>{{poll.poll_name}}</h2>
+            <p>Votes: {{poll.votes}} &nbsp;&nbsp;&nbsp;&nbsp;
+            Views: {{poll.views}}</p>
+            <br>
+            <a id="take-poll" href="/polls/{{poll.id}}">Take Poll</a>
+            </div>
+        {% endfor %} 
+    </div>
+    <div class="pagination">
+        {% if polls.currentPage == 1 %}
+            <a href="/polls?page={{ polls.currentPage + 1}}">Next Page</a>
+        {% elif polls.currentPage == polls.lastPage %}
+            <a href="/polls?page={{ polls.currentPage - 1}}">Previous Page</a>
+        {% else %}
+            <a href="/polls?page={{ polls.currentPage - 1}}">Previous Page</a>
+            <a href="/polls?page={{ polls.currentPage + 1}}">Next Page</a>
+        {% endif %}
+    </div>
+{% endblock %}

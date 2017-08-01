@@ -1,0 +1,107 @@
+{% extends 'master' %}
+
+{% block content %}
+    <div id="poll-notification"></div>
+    <form id="poll-admin">
+        <b>Login as poll admin:</b> &nbsp; <input type='password' name='admin'><input type="submit" value="Login">
+    </form>
+
+    <a id="back" href="/polls">&larr; Back To All Polls</a>
+
+    <div class="poll">
+        <h2>{{poll.poll_name}}</h2>
+        <p>Views: {{poll.views}} &nbsp;&nbsp; Votes: {{votes | length}}</p>
+
+        {% for option in options %}
+            <p class="answer" data-optionid="{{option.id}}">{{option.poll_option}}</p>
+        {% endfor %}
+
+        <!-- decide to show vote button if user has not already voted -->
+        {% if votes[0] === undefined %}
+            <button data-csrf="{{csrfToken}}" data-pollid="{{ poll.id }}" id="vote_btn">VOTE</button>
+        {% else %}
+            {% for vote in votes %}
+                {% if vote.voter == ip %}
+                    <p id="voted">You have already voted for this poll</p>
+                {% else %}
+                    <button data-csrf="{{csrfToken}}" data-pollid="{{ poll.id }}" id="vote_btn">VOTE</button>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <section id="extras">
+            <button id="view-results"><span id="result-btn-text">View Poll Results</span> <span id="result-arr">&#10148;</span></button>
+            
+            <div id="share">
+                <h3>Share This Poll With Your Friends!</h3>
+                <div id="share-buttons"></div>
+                <h3>Or Use This Link:</h3>
+                <p style="font-weight: 500;">{{url}}</p>
+            </div>
+        </section>
+
+        <div id="poll-results" class="animated">
+            <h3>Poll Results</h3>
+            <canvas id="chart" width="100" height="100"></canvas>
+            <div id="stats"></div>
+        </div>
+    </div>
+    
+
+    <!-- scripts -->
+    <script src="/poll.js"></script>
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.jssocials/1.5.0/jssocials.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
+    <script>
+        //share buttons
+        $('#share-buttons').jsSocials({
+            shares: ["email", "twitter", "facebook", "googleplus", "stumbleupon", "messenger", "rss"],
+            url: "http://localhost:3333/polls/{{poll.id}}",
+            text: 'Vote For "{{poll.poll_name}}" on thepeoplespoll.com:',
+            showLabel: false,
+            showCount: true,
+        });
+
+        //bar graph of poll results    
+        var ctx = document.getElementById("chart");
+        var stats = document.getElementById('stats');
+        var votes = [];
+        var options = [];
+        var labels = [];
+
+        {% for option in options %}
+            options.push({{option | json | safe}});
+        {% endfor %}
+
+        options.forEach(function(option){
+            labels.push(option.poll_option);
+            let voteNum = 0;
+            {% for vote in votes %}
+                if ("{{vote.option_id}}" == option.id){
+                    voteNum++;
+                }
+            {% endfor %}
+            votes.push(voteNum);
+        });
+        
+        var html = "";
+        for(i = 0; i < labels.length; i++){
+            html += "<p>" + labels[i] + ": " + votes[i] + " votes</p>";
+        }
+
+        stats.innerHTML = html;
+        
+        var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '# of Votes',
+                data: votes,
+                backgroundColor: ['red','blue','yellow','green','orange','purple', 'skyblue', 'brown'],
+                borderWidth: 0
+            }]
+        }
+    });
+    </script>
+{% endblock %}
