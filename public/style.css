@@ -10,9 +10,42 @@ body {
   color: #3f3f3f;
 }
 
+
+
 * {
   padding: 0;
   margin: 0;
+}
+
+nav {
+  background: #1a1a1a;
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  padding: 1% 3%;
+  z-index: 100;
+}
+
+nav h1 {
+  margin: 0px 50px 0px 0px;
+  color: mediumaquamarine;
+}
+
+nav a {
+  text-decoration: none;
+  color: whitesmoke;
+  font-weight: bold;
+}
+
+nav ul {
+  list-style-type: none;
+}
+
+nav ul li {
+  text-decoration: underline;
+  display: inline-block;
+  margin: 0px 10px
 }
 
 .homepage {
@@ -60,33 +93,35 @@ body {
   color: ivory;
 }
 
-.new-poll {
+.new-poll, .edit-poll {
   padding: 20px 100px;
 }
 
-.new-poll h1 {
+.new-poll h1, .edit-poll h1 {
   margin-left: -20px;
   color: ivory;
 }
 
-.new-poll .required {
+.new-poll .required{
   color: ivory;
   margin-bottom: 10px;
 }
 
 
-#new-poll {
+#new-poll, #edit-poll {
   width: 60%;
   min-width: 300px;
   background: whitesmoke;
   padding: 20px 50px;
 }
 
-#new-poll .input-field {
+#new-poll .input-field, #edit-poll .input-field {
   margin: 15px 0px;
+  font-weight: 500;
+  font-size: 18px;
 }
 
-#new-poll #add-option {
+#new-poll #add-option, #edit-poll #add-option {
   display: inline-block;
   border: none;
   color: ivory;
@@ -95,13 +130,14 @@ body {
   background: cadetblue;
 }
 
-#new-poll input {
+#new-poll input, #edit-poll input  {
   display: block;
   margin: 10px 0px;
-  border: 1px solid #0d0d0d;
+  border: 1px solid darkgrey;
+  font-size: 16px;
 }
 
-#new-poll input[type='submit'] {
+#new-poll input[type='submit'], #edit-poll input[type='submit'] {
   display: block;
   margin: 10px 0px;
   border: none;
@@ -113,14 +149,40 @@ body {
   text-transform: uppercase;
 }
 
+.option {
+  align-items: center;
+}
+.remove-option {
+  font-size: 24px;
+  padding: 5px;
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+#delete-poll {
+    width: 60%;
+    min-width: 300px;
+    background: whitesmoke;
+    padding: 0px 50px 20px 50px;
+    margin-top: -20px;
+}
+
+#delete-btn {
+  margin: 0px;
+  border: none;
+  background: crimson;
+  color: ivory;
+  font-size: 18px;
+  padding: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
 
 #poll-admin {
-  position: absolute;
   max-width: 96%;
   width: 96vw;
-  top: 0px;
   padding: 10px 2%;
-  background: #1a1a1a;
+  margin-top: 25px;
   color: ivory;
 }
 
@@ -140,7 +202,7 @@ body {
   position: fixed;
   top: 20px;
   right: 10px;
-  z-index: 3;
+  z-index: 500;
 }
 
 #poll-notification .success {
@@ -155,7 +217,7 @@ body {
   display: inline-block;
   padding: 5px;
   color: ivory;
-  margin: 100px 50px 50px 100px;
+  margin: 50px;
   font-weight: 500;
   border-bottom: 1px solid ivory;
   text-decoration: none;
@@ -219,9 +281,6 @@ body {
   align-items: flex-start;
 }
 
-.poll #extras #share {
-}
-
 .poll #extras #share h3 {
   margin-bottom: 10px;
 }
@@ -280,9 +339,37 @@ body {
   padding: 0px 20px;
 }
 
-#all-polls h1{
-  color:ivory;
-  margin-left: 80px;
+#all-polls header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ivory;
+}
+
+#all-polls header h1 {
+  margin-right: 50px;
+} 
+
+#all-polls header form {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+#all-polls header form input {
+  font-size: initial;
+  padding: 3px 10px;
+  border: none;
+}
+
+#all-polls header form select {
+  background: white;
+}
+
+#all-polls header form input[type='submit'] {
+  background: cadetblue;
+  color: ivory;
+  padding: 3px 10px;
+  border: none;
 }
 
 #all-polls .poll {
@@ -297,7 +384,18 @@ body {
 
 #all-polls .poll h2 {
   font-size: 24px;
+  margin-bottom: 0px;
+}
+
+#all-polls .poll .date {
+  color: dimgray;
+  display: block;
   margin-bottom: 10px;
+}
+
+#all-polls .poll p {
+  font-size: 18px;
+  font-weight: 500;
 }
 
 #all-polls .poll #take-poll {
@@ -321,4 +419,83 @@ body {
   padding: 5px 10px;
   border-radius: 50px;
   margin: 0px 20px;
+}
+
+#form-error {
+  color: crimson;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+#form-error p {
+  margin: 5px 0px;
+}
+
+@media (max-width: 414px) {
+  .homepage {
+    padding: 10px 15px;
+  }
+  .homepage h1 {
+    font-size: 34px;
+  }
+  nav {
+    padding: 2%;
+  }
+  nav h1 {
+    font-size: 26px;
+    margin-right: 10px;
+  }
+  nav ul li {
+    margin: 0 5px;
+  }
+  .poll {
+    padding: 10px 6%;
+  }
+
+  #back {
+    margin-top: 20px;
+    margin-left: 10px;
+  }
+
+  #poll-admin b {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  #all-polls header {
+    flex-direction: column;
+  }
+
+  #all-polls header h1 {
+    text-align: left;
+  }
+
+  #all-polls form label {
+    display: block;
+    margin: 10px 0px;
+  }
+  #all-polls .poll {
+    padding: 10px 5% 20px 5%;
+  }
+  .new-poll {
+    padding: 20px;
+  }
+  .new-poll h1 {
+    margin-left: 0px;
+  }
+  #new-poll {
+    padding: 10px 15px;
+  }
+  .edit-poll {
+    padding: 10px 15px;
+  }
+  .edit-poll h1 {
+    margin-left: 0px;
+  }
+  .edit-poll #edit-poll {
+    padding: 10px 15px;
+  }
+  .edit-poll #delete-poll {
+    padding: 10px 15px;
+  }
 }

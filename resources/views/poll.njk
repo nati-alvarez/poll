@@ -2,8 +2,10 @@
 
 {% block content %}
     <div id="poll-notification"></div>
-    <form id="poll-admin">
-        <b>Login as poll admin:</b> &nbsp; <input type='password' name='admin'><input type="submit" value="Login">
+    <form action="/polls/{{poll.id}}/login" method="POST" id="poll-admin">
+        {{csrfField}}
+        <b>Login as poll admin:</b> <input type='password' name='admin'><input type="submit" value="Login">
+        <p style="color:crimson;font-weight:bold;margin-top:10px;">{{error}}</p>
     </form>
 
     <a id="back" href="/polls">&larr; Back To All Polls</a>
@@ -18,16 +20,30 @@
 
         <!-- decide to show vote button if user has not already voted -->
         {% if votes[0] === undefined %}
-            <button data-csrf="{{csrfToken}}" data-pollid="{{ poll.id }}" id="vote_btn">VOTE</button>
+            {% if votingPeriod == false %}
+                <p id="voted">Voting period has ended. You can no longer vote for this poll.</p>
+            {% else %}
+                <button data-csrf="{{csrfToken}}" data-pollid="{{ poll.id }}" id="vote_btn">VOTE</button>
+            {% endif %}
         {% else %}
+
+            {% set hasVoted = false %}
+
             {% for vote in votes %}
                 {% if vote.voter == ip %}
-                    <p id="voted">You have already voted for this poll</p>
-                {% else %}
-                    <button data-csrf="{{csrfToken}}" data-pollid="{{ poll.id }}" id="vote_btn">VOTE</button>
+                    {% set hasVoted = true %}
                 {% endif %}
             {% endfor %}
+
+            {% if votingPeriod == false %}
+                <p id="voted">Voting period has ended. You can no longer vote for this poll.</p>
+            {% elif hasVoted == true %}
+                <p id="voted">You have already voted for this poll</p>
+            {% else %}
+                <button data-csrf="{{csrfToken}}" data-pollid="{{ poll.id }}" id="vote_btn">VOTE</button>
+            {% endif %}
         {% endif %}
+
         <section id="extras">
             <button id="view-results"><span id="result-btn-text">View Poll Results</span> <span id="result-arr">&#10148;</span></button>
             
@@ -49,7 +65,7 @@
 
     <!-- scripts -->
     <script src="/poll.js"></script>
-    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.jssocials/1.5.0/jssocials.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
     <script>
@@ -62,12 +78,14 @@
             showCount: true,
         });
 
+        
         //bar graph of poll results    
         var ctx = document.getElementById("chart");
         var stats = document.getElementById('stats');
         var votes = [];
         var options = [];
         var labels = [];
+        var barColors = [];
 
         {% for option in options %}
             options.push({{option | json | safe}});
@@ -75,6 +93,7 @@
 
         options.forEach(function(option){
             labels.push(option.poll_option);
+            barColors.push('cadetblue');
             let voteNum = 0;
             {% for vote in votes %}
                 if ("{{vote.option_id}}" == option.id){
@@ -88,20 +107,20 @@
         for(i = 0; i < labels.length; i++){
             html += "<p>" + labels[i] + ": " + votes[i] + " votes</p>";
         }
-
+        
         stats.innerHTML = html;
         
         var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: '# of Votes',
-                data: votes,
-                backgroundColor: ['red','blue','yellow','green','orange','purple', 'skyblue', 'brown'],
-                borderWidth: 0
-            }]
-        }
-    });
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '# of Votes',
+                    data: votes,
+                    backgroundColor: barColors,
+                    borderWidth: 1
+                }]
+            }
+        });
     </script>
 {% endblock %}

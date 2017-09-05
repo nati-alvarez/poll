@@ -6,6 +6,8 @@
         <p class="required" >* marks a required field</p>
         
         <form id="new-poll" action="/polls" method="POST" onsubmit="return validateNewPoll();">
+            <div id='form-error'></div>
+            
             {{ csrfField }}
             <div class="input-field">
                 <label><p>*Name Your Poll:</p>
@@ -42,7 +44,7 @@
     <script>
         var today = new Date();
         var dd = today.getDate();
-        var mm = today.getMonth()+1; //January is 0!
+        var mm = today.getMonth()+1; //January is 0
         var yyyy = today.getFullYear();
         if(dd<10){
                 dd='0'+dd

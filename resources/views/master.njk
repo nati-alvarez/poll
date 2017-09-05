@@ -8,7 +8,7 @@
 
 
   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,600,700,900' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,600,700,900' rel='stylesheet' type='text/css'>
   <link rel="icon" href="/assets/favicon.png" type="image/x-icon"> 
   <link rel="stylesheet" type="text/css" href="/normalize.css">
   <link rel="stylesheet" type="text/css" href="/style.css">
@@ -17,7 +17,13 @@
 
 </head>
 <body>
-
+  <nav>
+    <a href="/"><h1>ThePeoplesPoll</h1></a>
+    <ul id="nav">
+      <a href="/polls/create"><li>New Poll</li></a>
+      <a href="/polls/"><li>View Polls</li></a>
+    </ul>
+  </nav>
   <section>
     <div class="__wrapper">
       {% block content %}{% endblock %}

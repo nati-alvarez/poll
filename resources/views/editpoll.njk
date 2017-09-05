@@ -1,0 +1,55 @@
+{% extends 'master' %}
+
+{% block content %}
+    <div class="edit-poll">
+        <h1>Edit Your Poll</h1>
+
+        <a style="margin:0;margin-bottom:50px;" id="back" href="/polls/{{poll.id}}">
+            &larr; Back To "{{poll.poll_name}}"
+        </a>
+
+        <form id="edit-poll" action="/polls/{{poll.id}}/update" method="POST" onsubmit="return validateEditPoll();">
+            {{ csrfField }}
+            <div class="input-field">
+                <label><p>Poll Name</p>
+                    <input type="text" name="title" value="{{poll.poll_name}}">
+                </label>
+            </div>
+            <div class="input-field">
+                <label id="options"><p>Edit Poll Options:</p>
+                    {% for option in options %}
+                        <input type="text" name="option[]" value="{{option.poll_option}}">
+                    {% endfor %}
+                </label>
+                <div id="add-option">+ Add More</div>
+            </div>
+            <div class="input-field">
+                {% if poll.expires %}
+                    {% set expireDate = (poll.expires).toISOString().substr(0, 10) %}
+                {% endif %}
+                <label><p>Set Poll End Date:</p>
+                    <input id="expires" type="date" name="expires" value="{{expireDate}}">
+                </label>
+            </div>
+            <div class="input-field">
+                <label><p>Change Poll Admin Password:</p>
+                    <input type="password" name="password">
+                </label>
+            </div>
+            <div class="input-field">
+                <label><p>Confirm Password:</p>
+                    <input type="password" name="confirm">
+                </label>
+            </div>
+            <small class="notice" >You will use this password to edit your poll later if needed</small>
+            <input type="submit" value="EDIT POLL">
+        </form>
+        <form id="delete-poll"onsubmit="return deleteConfirm('{{poll.poll_name}}')" method="POST" action="/polls/{{poll.id}}?_method=DELETE">
+            {{csrfField}}
+            <button id="delete-btn">DELETE POLL</button>
+        </form>
+
+    </div>
+
+    <script src="/validateEditPoll.js"></script>
+{% endblock %}

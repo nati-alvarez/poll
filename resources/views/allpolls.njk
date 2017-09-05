@@ -2,10 +2,56 @@
 
 {% block content %}
     <div id="all-polls">
-        <h1>The Latest Polls</h1>
+        {% if query %}
+            <header>
+                <h1>Search Results For "{{query}}"</h1>
+                <form action="/polls" method="GET">
+                    <label>
+                        Search Polls: 
+                        <input placeholder="Enter a keyword" type="text" value="{{query}}" name="query">
+                    </label>
+                    <label>
+                        Sort By:
+                        <select name="sort">
+                            <option value='asc'>Newest</option>
+                            <option value='desc'>Oldest</option>
+                            <option value='views'>Most Views</option>
+                            <option value='votes'>Most Votes</option>
+                        </select>
+                    </label>
+                    <input type="submit" value="Search">
+                </form>
+            </header>
+        {% else %}
+            <header>
+                <h1>The Latest Polls</h1>
+                <form action="/polls" method="GET">
+                    <label>
+                        Search Polls: 
+                        <input placeholder="Enter a keyword" type="text" name="query">
+                    </label>
+                    <label>
+                        Sort By:
+                        <select name="sort">
+                            <option value='desc'>Newest</option>
+                            <option value='asc'>Oldest</option>
+                            <option value='views'>Most Views</option>
+                            <option value='votes'>Most Votes</option>
+                        </select>
+                    </label>
+                    <input type="submit" value="Search">
+                </form>
+            </header>
+        {% endif%}
+
+        {% if polls.data[0] === undefined %}
+            <h3 class="poll">No polls yet. Why not <a href="/polls/create">make one!</a></h3>
+        {% endif %}
+
         {% for poll in polls.data %}
             <div class="poll">
             <h2>{{poll.poll_name}}</h2>
+            <span class="date">Published: {{poll.created_at}}</span>
             <p>Votes: {{poll.votes}} &nbsp;&nbsp;&nbsp;&nbsp;
             Views: {{poll.views}}</p>
             <br>
@@ -14,13 +60,19 @@
         {% endfor %} 
     </div>
     <div class="pagination">
-        {% if polls.currentPage == 1 %}
-            <a href="/polls?page={{ polls.currentPage + 1}}">Next Page</a>
+        {% if query or sort %}
+            {% set queryString = '&query=' + query + '&sort=' + sort %}
+        {% endif %}
+        
+        {% if polls.currentPage > polls.lastPage or polls.lastPage <= 1 %}
+            <!-- only one page; no pagination -->
+        {% elif polls.currentPage == 1 %}
+            <a href="/polls?page={{ polls.currentPage + 1}}{{queryString}}">Next Page</a>
         {% elif polls.currentPage == polls.lastPage %}
-            <a href="/polls?page={{ polls.currentPage - 1}}">Previous Page</a>
+            <a href="/polls?page={{ polls.currentPage - 1}}{{queryString}}">Previous Page</a>
         {% else %}
-            <a href="/polls?page={{ polls.currentPage - 1}}">Previous Page</a>
-            <a href="/polls?page={{ polls.currentPage + 1}}">Next Page</a>
+            <a href="/polls?page={{ polls.currentPage - 1}}{{queryString}}">Previous Page</a>
+            <a href="/polls?page={{ polls.currentPage + 1}}{{queryString}}">Next Page</a>
         {% endif %}
     </div>
 {% endblock %}

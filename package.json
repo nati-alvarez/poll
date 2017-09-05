@@ -1,5 +1,5 @@
 {
-  "name": "adonis-app",
+  "name": "the-peoples-poll",
   "version": "3.2.1",
   "main": "server.js",
   "scripts": {
@@ -21,7 +21,9 @@
     "adonis-framework": "^3.0.10",
     "adonis-lucid": "^3.0.14",
     "adonis-middleware": "^1.0.11",
+    "adonis-validation-provider": "^3.0.5",
     "adonis-websocket": "^1.0.3",
+    "client-ip": "^1.0.0",
     "mysql": "^2.14.0",
     "sqlite3": "^3.1.8",
     "uuid": "^3.1.0",

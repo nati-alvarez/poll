@@ -18,7 +18,7 @@ if (vote_btn){
     vote_btn.addEventListener('click', function() {
         var answer = document.getElementsByClassName("selected")[0];
         var ajax = new XMLHttpRequest();
-        ajax.open('PUT', '/polls/' + vote_btn.dataset.pollid + "/vote", true);
+        ajax.open('POST', '/polls/' + vote_btn.dataset.pollid + "/vote", true);
         ajax.setRequestHeader('csrf-token', vote_btn.dataset.csrf);
 
 

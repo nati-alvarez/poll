@@ -2,21 +2,16 @@ function validateNewPoll(){
     var inputs = document.getElementsByTagName('input');
     var filledOut = true;
     var whitespace = /\s/;
-    var formError = document.getElementById('form-error');
-    formError.innerHTML = "";
     
     for (i = 0; i < inputs.length; i++){
         if (inputs[i].type == 'date'){
             //date field is not required, do nothing
-        }else {
-            if (!inputs[i].value){
-                formError.innerHTML = `<h2>FORM ERROR:</h2><p>Required fields not completed.</p>`;
-                filledOut = false;
-            }
-
+        } else {
             if(inputs[i].type == 'password' && whitespace.test(inputs[i].value)){
+                console.log(whitespace.test(inputs[i]));
+                console.log(inputs[i]);
                 filledOut = false;
-                formError.innerHTML = "<h2>FORM ERROR:</h2><p>Passwords cannot contain whitespace.</p>";
+                console.log("passwords cannot contain whitespace");
             }
         }
     }
@@ -26,13 +21,23 @@ function validateNewPoll(){
     var password = (document.querySelectorAll("[name='password'")[0].value);
     var confirm = (document.querySelectorAll("[name='confirm'")[0].value);
 
+
     if (password !== confirm){
-        formError.innerHTML = "<h2>FORM ERROR:</h2><p>Passwords do not match.</p>";
+        console.log("passwords do not match");
         return false;
     }
 
     return true;
 
+}
+
+function deleteConfirm(pollName) {
+    var confirmDeleteion = confirm("Are you sure you want to delete this poll? This will be permanent.");
+    if (confirmDeleteion){
+        return true;
+    }else {
+        return false;
+    }
 }
 
 function removeOption(button) {
